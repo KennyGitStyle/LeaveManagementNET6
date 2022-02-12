@@ -1,0 +1,71 @@
+﻿@model IEnumerable<LeaveTypeVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Leave Page</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success"><i class="fa-solid fa-plus"></i></a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DefaultDays)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeaveName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DefaultDays)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></a> 
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fa-solid fa-circle-info"></i></a> 
+                <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button"><i class="fa-solid fa-trash-can"></i></button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<form id="deleteForm" asp-action="Delete">
+        <input type="hidden" id="leaveTypeId" name="Id" />
+</form>
+
+
+@section Scripts{
+    <script>
+        $(function(){
+            $('.table').DataTable();
+            $('.deleteBtn').click(function(e) {
+                swal({
+                    title: "Are you sure?",
+                    text: "This item will be permanently deleted!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if(confirm){
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        $('#leaveTypeId').val(id);
+                        $('#deleteForm').submit();
+
+                    }
+                });
+            });
+        });
+    </script>
+}
